@@ -1,16 +1,14 @@
-
-
 # Face Blurring Tool
 
-Un outil Python simple et efficace pour flouter automatiquement les visages dans des images, vidéos ou en temps réel via webcam, utilisant MediaPipe pour la détection faciale.
+A simple and effective Python tool to automatically blur faces in images, videos, or real-time via webcam, using MediaPipe for face detection.
 
-## 📋 Fonctionnalités
+## 📋 Features
 
-- **Mode Image** : Floute les visages dans une image statique
-- **Mode Vidéo** : Traite une vidéo complète et floute tous les visages détectés
-- **Mode Webcam** : Floute les visages en temps réel depuis votre webcam
+- **Image Mode**: Blur faces in a static image
+- **Video Mode**: Process a complete video and blur all detected faces
+- **Webcam Mode**: Blur faces in real-time from your webcam
 
-## 🛠️ Prérequis
+## 🛠️ Requirements
 
 - Python 3.7+
 - OpenCV
@@ -18,140 +16,140 @@ Un outil Python simple et efficace pour flouter automatiquement les visages dans
 
 ## 📦 Installation
 
-1. Clonez ou téléchargez ce repository
+1. Clone or download this repository
 
-2. Installez les dépendances requises :
+2. Install the required dependencies:
 ```bash
 pip install opencv-python mediapipe
 ```
 
-## 🚀 Utilisation
+## 🚀 Usage
 
-### Mode Webcam (par défaut)
+### Webcam Mode (default)
 ```bash
 python face_blur.py --mode webcam
 ```
 
-Appuyez sur `ESC` pour quitter.
+Press `ESC` to quit.
 
-### Mode Image
+### Image Mode
 ```bash
-python face_blur.py --mode image --filePath chemin/vers/image.jpg
+python face_blur.py --mode image --filePath path/to/image.jpg
 ```
 
-L'image traitée sera sauvegardée dans `./output/output.png`
+The processed image will be saved to `./output/output.png`
 
-### Mode Vidéo
+### Video Mode
 ```bash
-python face_blur.py --mode video --filePath chemin/vers/video.mp4
+python face_blur.py --mode video --filePath path/to/video.mp4
 ```
 
-La vidéo traitée sera sauvegardée dans `./output/output.mp4`
+The processed video will be saved to `./output/output.mp4`
 
 ## ⚙️ Arguments
 
-| Argument | Type | Défaut | Description |
-|----------|------|--------|-------------|
-| `--mode` | str | `webcam` | Mode d'exécution : `webcam`, `image`, ou `video` |
-| `--filePath` | str | `None` | Chemin vers le fichier image ou vidéo (requis pour modes image/vidéo) |
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `--mode` | str | `webcam` | Execution mode: `webcam`, `image`, or `video` |
+| `--filePath` | str | `None` | Path to image or video file (required for image/video modes) |
 
-## 📁 Structure du projet
+## 📁 Project Structure
 ```
 .
-├── face_blur.py          # Script principal
+├── face_blur.py          # Main script
 ├── README.md             # Documentation
-└── output/               # Dossier de sortie (créé automatiquement)
-    ├── output.png        # Image traitée
-    └── output.mp4        # Vidéo traitée
+└── output/               # Output folder (created automatically)
+    ├── output.png        # Processed image
+    └── output.mp4        # Processed video
 ```
 
-## 🔧 Paramètres de détection
+## 🔧 Detection Parameters
 
-Le script utilise MediaPipe Face Detection avec les paramètres suivants :
-- **model_selection** : 0 (modèle optimisé pour courte distance, < 2 mètres)
-- **min_detection_confidence** : 0.5 (seuil de confiance minimum pour la détection)
+The script uses MediaPipe Face Detection with the following parameters:
+- **model_selection**: 0 (model optimized for short distance, < 2 meters)
+- **min_detection_confidence**: 0.5 (minimum confidence threshold for detection)
 
-Vous pouvez ajuster ces paramètres dans le code selon vos besoins.
+You can adjust these parameters in the code according to your needs.
 
-## 📝 Exemples
+## 📝 Examples
 ```bash
-# Flouter les visages dans une photo de groupe
-python face_blur.py --mode image --filePath photos/groupe.jpg
+# Blur faces in a group photo
+python face_blur.py --mode image --filePath photos/group.jpg
 
-# Flouter les visages dans une vidéo de surveillance
+# Blur faces in a surveillance video
 python face_blur.py --mode video --filePath videos/surveillance.mp4
 
-# Utilisation en temps réel
+# Real-time usage
 python face_blur.py --mode webcam
 ```
 
-## 🔄 Comment ça marche
+## 🔄 How It Works
 
-1. **Détection des visages** : MediaPipe détecte les visages dans l'image/frame
-2. **Extraction des coordonnées** : Les bounding boxes des visages sont récupérées
-3. **Application du flou** : Un flou gaussien (30x30) est appliqué sur chaque visage détecté
-4. **Sauvegarde** : Le résultat est affiché (webcam) ou sauvegardé (image/vidéo)
+1. **Face Detection**: MediaPipe detects faces in the image/frame
+2. **Coordinate Extraction**: Bounding boxes of faces are retrieved
+3. **Blur Application**: A gaussian blur (30x30) is applied to each detected face
+4. **Save**: The result is displayed (webcam) or saved (image/video)
 
-## ⚙️ Personnalisation
+## ⚙️ Customization
 
-### Modifier l'intensité du flou
+### Modify Blur Intensity
 
-Dans la fonction `process_img()`, changez les valeurs `(30, 30)` :
+In the `process_img()` function, change the `(30, 30)` values:
 ```python
 img[y1:y1 + h, x1:x1 + w, :] = cv2.blur(img[y1:y1 + h, x1:x1 + w, :], (50, 50))
 ```
 
-### Changer le modèle de détection
+### Change Detection Model
 ```python
-# model_selection=0 : courte distance (< 2m)
-# model_selection=1 : longue distance (> 2m)
+# model_selection=0 : short distance (< 2m)
+# model_selection=1 : long distance (> 2m)
 with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5) as face_detection:
 ```
 
-### Ajuster la confiance de détection
+### Adjust Detection Confidence
 ```python
-# Valeur entre 0.0 et 1.0
-# Plus élevé = moins de faux positifs, mais peut manquer des visages
+# Value between 0.0 and 1.0
+# Higher = fewer false positives, but may miss faces
 min_detection_confidence=0.7
 ```
 
-## ⚠️ Notes importantes
+## ⚠️ Important Notes
 
-- Le flou par défaut est de 30x30 pixels
-- Les vidéos en sortie utilisent le codec MP4V avec 25 FPS
-- Le dossier `output/` est créé automatiquement
-- Les fichiers de sortie écrasent les fichiers précédents
+- Default blur is 30x30 pixels
+- Output videos use MP4V codec with 25 FPS
+- The `output/` folder is created automatically
+- Output files overwrite previous files
 
-## 🐛 Résolution de problèmes
+## 🐛 Troubleshooting
 
 ### "Cannot open webcam"
-- Vérifiez que votre webcam est connectée
-- Essayez de changer `cv2.VideoCapture(0)` en `cv2.VideoCapture(1)`
+- Check that your webcam is connected
+- Try changing `cv2.VideoCapture(0)` to `cv2.VideoCapture(1)`
 
 ### "Failed to read video"
-- Vérifiez que le chemin du fichier est correct
-- Assurez-vous que le format vidéo est supporté (mp4, avi, mov, etc.)
+- Check that the file path is correct
+- Ensure the video format is supported (mp4, avi, mov, etc.)
 
-### Performances lentes
-- Réduisez la résolution de la vidéo/webcam
-- Utilisez `model_selection=0` pour de meilleures performances
+### Slow Performance
+- Reduce video/webcam resolution
+- Use `model_selection=0` for better performance
 
-## 🤝 Contribution
+## 🤝 Contributing
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
-- Signaler des bugs
-- Proposer de nouvelles fonctionnalités
-- Améliorer la documentation
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Improve documentation
 
-## 📄 Licence
+## 📄 License
 
-Ce projet est libre d'utilisation pour des fins éducatives et personnelles.
+This project is free to use for educational and personal purposes.
 
-## 🙏 Remerciements
+## 🙏 Acknowledgments
 
-- [MediaPipe](https://google.github.io/mediapipe/) pour la détection faciale
-- [OpenCV](https://opencv.org/) pour le traitement d'image
+- [MediaPipe](https://google.github.io/mediapipe/) for face detection
+- [OpenCV](https://opencv.org/) for image processing
 
 ---
 
-**Note de confidentialité** : Cet outil est conçu pour protéger la vie privée en floutant les visages. Assurez-vous d'avoir les permissions nécessaires avant de traiter des images/vidéos de personnes.
+**Privacy Note**: This tool is designed to protect privacy by blurring faces. Make sure you have the necessary permissions before processing images/videos of people.
